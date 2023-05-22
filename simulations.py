@@ -68,8 +68,8 @@ class Experiment():
         # )
         model, train_acc, val_acc, test_acc = trainer(
             copy.deepcopy(G),
-            train_idx, val_idx, test_idx, labels,
-            HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"],
+            train_idx, val_idx, test_idx, labels, 10,
+            HYPER_PARAMS["hidden_size"], HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"],
             verbose=False
         )
         return model, train_acc, val_acc, test_acc
