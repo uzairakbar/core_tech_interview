@@ -22,6 +22,7 @@ def hyper_param_opt(
             lr=config['lr'],
             weight_decay=config['weight_decay'],
             epochs=config['epochs'],
+            early_stopping=config['early_stopping'],
             verbose=verbose,
         )
         if val_loss < best_val_loss:

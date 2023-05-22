@@ -7,7 +7,7 @@ from utils import class_weights
 
 def trainer(
     G, train_idx, val_idx, test_idx, labels,
-    hidden_size, num_hidden, lr, weight_decay, epochs, 
+    hidden_size, num_hidden, lr, weight_decay, epochs, early_stopping=True,
     verbose=True, plot_loss=False):
     model = HeteroRGCN(
         G, 
@@ -48,7 +48,7 @@ def trainer(
             if "perturbes" in n and "bias" not in n:
                 norm += p.norm().item()
 
-        if best_val_loss > val_loss:
+        if best_val_loss > val_loss and early_stopping:
             best_val_acc = val_acc
             best_test_acc = test_acc
             best_val_loss = val_loss
@@ -56,6 +56,15 @@ def trainer(
             best_model = copy.deepcopy(model)
             best_norm = norm
             best_epoch = epoch
+        elif not early_stopping:
+            best_val_acc = val_acc
+            best_test_acc = test_acc
+            best_val_loss = val_loss
+            best_train_acc = train_acc
+            best_model = model
+            best_norm = norm
+            best_epoch = epoch
+
 
         opt.zero_grad()
         loss.backward()

@@ -28,7 +28,8 @@ SEARCH_SPACE = {
        'hidden_size': [10,],
        'lr': lognorm(s=0.01, scale=0.01),
        'weight_decay': lognorm(s=0.01, scale=0.01),
-       'epochs': [250,]
+       'epochs': [250,],
+       'early_stopping': [True,],
 }
 
 # HYPER_PARAMS = {
@@ -37,6 +38,7 @@ SEARCH_SPACE = {
 #        'lr': 0.01,
 #        'weight_decay': 0.01,
 #        'epochs': 250,
+#        'early_stopping': False,
 # }
 
 
@@ -69,7 +71,7 @@ class Experiment():
         # model, train_acc, val_acc, test_acc, _ = trainer(
         #     copy.deepcopy(G),
         #     train_idx, val_idx, test_idx, labels,
-        #     HYPER_PARAMS["hidden_size"], HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"],
+        #     HYPER_PARAMS["hidden_size"], HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"], HYPER_PARAMS["early_stopping"],
         #     verbose=False
         # )
         return model, train_acc, val_acc, test_acc
