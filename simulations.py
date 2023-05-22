@@ -26,7 +26,7 @@ SEARCH_SPACE = {
        'hidden_size': [10,],
        'lr': lognorm(s=0.01, scale=0.01),
        'weight_decay': lognorm(s=0.01, scale=0.01),
-       'epochs': [100,]
+       'epochs': [250,]
 }
 
 
