@@ -5,17 +5,10 @@ import dgl
 def generate_graph(noise_perturbes=None, indices=None, f=0.0):
     data_file_path = '/content/ACM.mat'
     data = scipy.io.loadmat(data_file_path)
-    print(list(data.keys()))
     num_papers = data['PvsA'].shape[0]
     num_authors = data['PvsA'].shape[1]
     num_subjects = data['PvsA'].nnz
     num_noise = num_papers + num_authors + num_subjects
-
-    print(type(data['PvsA']))
-    print('#Papers:', num_papers)
-    print('#Authors:', num_authors)
-    print('#Links:', num_subjects)
-    print("#Noise Samples:", num_noise)
 
     noise = torch.arange(num_noise)
     papers, paper_noise = torch.arange(num_papers), noise[:num_papers]

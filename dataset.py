@@ -11,7 +11,6 @@ def download_data():
 def train_val_test_split():
     data_file_path = '/content/ACM.mat'
     data = scipy.io.loadmat(data_file_path)
-    print(list(data.keys()))
 
     num_papers = data['PvsA'].shape[0]
     num_authors = data['PvsA'].shape[1]
@@ -30,7 +29,6 @@ def train_val_test_split():
 
     # generate train/val/test split
     pid = p_selected.row
-    print(len(pid))
     shuffle = np.random.permutation(pid)
     train_idx = torch.tensor(shuffle[0:800]).long()
     val_idx = torch.tensor(shuffle[800:1000]).long()

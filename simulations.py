@@ -73,6 +73,7 @@ class Experiment():
             for j in range(self.n_experiments):
                 train_idx, val_idx, test_idx, labels = self.generate_dataset_split()
                 for graph_name, graph in self.graphs.items():
+                    print(f"EXPERIMENT -- nth Noise: {i+1}/{self.sweep_samples}, Exp: {j+1}/{self.n_experiments}, Graph: {graph_name}")
                     G = graph(indices=(train_idx, val_idx, test_idx), f=param)
                     _, results[graph_name][i][j] = self.fit(
                         G, train_idx, val_idx, test_idx, labels
@@ -85,7 +86,7 @@ class Experiment():
 def main():
     f_values, results = Experiment().run()
     sweep_plot(
-        f_values, results, xlabel=r"$f$", xscale="linear"
+        f_values, results, xlabel=r"Noise Strength $f$", xscale="linear"
     )
 
 
