@@ -28,9 +28,9 @@ def generate_graph(noise_perturbes=None, indices=None, f=0.0):
         papers, paper_noise = papers[train_val_idx], paper_noise[train_val_idx]
     
     noise_targets = {
-        "paper": (papers, paper_noise),
-        "author": (authors, author_noise),
-        "subject": (subjects, subject_noise),
+        "paper": (paper_noise, papers),
+        "author": (author_noise, authors),
+        "subject": (subject_noise, subjects),
     }
     
     data_dict = {
