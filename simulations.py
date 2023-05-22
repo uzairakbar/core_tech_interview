@@ -35,7 +35,8 @@ class Experiment():
                  n_experiments = 10,
                  seed = 42,
                  graphs = "all",
-                 sweep_samples = 10):
+                 sweep_samples = 10,
+                 search_space=None):
         self.n_experiments = n_experiments
         self.seed = seed
         self.sweep_samples = sweep_samples
@@ -43,11 +44,15 @@ class Experiment():
             self.graphs = ALL_GRAPHS
         else:
             self.graphs = {m: ALL_GRAPHS[m] for m in graphs.split(',')}
+        
+        if search_space is None:
+            search_space = SEARCH_SPACE
+        self.search_space = search_space
         download_data()
     
     def fit(self, G, train_idx, val_idx, test_idx, labels):
         model, accuracy = hyper_param_opt(
-            G, SEARCH_SPACE, train_idx, val_idx, test_idx, labels, num_trials=10
+            G, self.search_space, train_idx, val_idx, test_idx, labels, num_trials=10
         )
         return model, accuracy
     
