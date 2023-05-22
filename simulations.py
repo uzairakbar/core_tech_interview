@@ -15,9 +15,9 @@ ALL_GRAPHS = {
     "Noise>P": lambda indices, f: generate_graph(noise_perturbes=["paper"], indices=indices, f=f),
     # "Noise>A": lambda indices, f: generate_graph(noise_perturbes=["author"], indices=indices, f=f),
     # "Noise>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
-    "Noise>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
+    # "Noise>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
     # "Noise>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
-    "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
+    # "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
 }
 
 
@@ -32,10 +32,10 @@ SEARCH_SPACE = {
 
 class Experiment():
     def __init__(self,
-                 n_experiments = 3,
+                 n_experiments = 5,
                  seed = 42,
                  graphs = "all",
-                 sweep_samples = 3):
+                 sweep_samples = 5):
         self.n_experiments = n_experiments
         self.seed = seed
         self.sweep_samples = sweep_samples
@@ -47,7 +47,7 @@ class Experiment():
     
     def fit(self, G, train_idx, val_idx, test_idx, labels):
         model, accuracy = hyper_param_opt(
-            G, SEARCH_SPACE, train_idx, val_idx, test_idx, labels, num_trials=3
+            G, SEARCH_SPACE, train_idx, val_idx, test_idx, labels, num_trials=10
         )
         return model, accuracy
     
