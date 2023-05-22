@@ -90,5 +90,5 @@ def trainer(
         plt.title(f"Training Config: #h-layers: {num_hidden}, #h-features: {hidden_size}, lr: {lr:.4f}, weight_decay: {weight_decay:.4f}")
         plt.grid()
 
-    print(f"""TRAINING RESULT -- Train Acc: {best_train_acc:.4f}, Val Acc: {best_val_acc:.4f}, Test Acc: {best_test_acc:.4f}""")
+    print(f"""TRAINING RESULT -- Train Acc: {best_train_acc:.4f}, Val Acc: {best_val_acc:.4f}, Test Acc: {best_test_acc:.4f}.\n""")
     return best_model.eval(), best_train_acc, best_val_acc, best_test_acc
