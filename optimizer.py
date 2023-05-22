@@ -8,9 +8,10 @@ def hyper_param_opt(
     config_generator = ParameterSampler(search_space, n_iter=num_trials)
     best_val_acc = 0
     best_test_acc = 0
+    best_train_acc = 0
     best_val_loss = float("inf")
     for i, config in enumerate(config_generator):
-        model, val_acc, test_acc, val_loss = trainer(
+        model, train_acc, val_acc, test_acc, val_loss = trainer(
             G=copy.deepcopy(G),
             train_idx=train_idx,
             val_idx=val_idx, 
@@ -29,6 +30,7 @@ def hyper_param_opt(
             best_config = config
             best_model = model
             best_val_loss = val_loss
+            best_train_acc = train_acc
         
         print(
             f"""Trial: {i}, Config: {config},
@@ -39,4 +41,4 @@ def hyper_param_opt(
         f"""\nBEST CONFIG: {best_config},
         Best Val Loss: {best_val_loss:.4f}, Best Val Acc: {best_val_acc:.4f}, Best Test Acc: {best_test_acc:.4f}"""
     )
-    return best_model, best_val_acc, best_test_acc
+    return best_model, best_train_acc, best_val_acc, best_test_acc

@@ -91,4 +91,4 @@ def trainer(
         plt.grid()
 
     print(f"""TRAINING RESULT -- Train Acc: {best_train_acc:.4f}, Val Acc: {best_val_acc:.4f}, Test Acc: {best_test_acc:.4f}.\n""")
-    return best_model.eval(), best_train_acc, best_val_acc, best_test_acc
+    return best_model.eval(), best_train_acc, best_val_acc, best_test_acc, best_val_loss

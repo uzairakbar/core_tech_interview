@@ -31,23 +31,23 @@ SEARCH_SPACE = {
        'epochs': [250,]
 }
 
-HYPER_PARAMS = {
-       'num_hidden': 3,
-       'hidden_size': 10,
-       'lr': 0.01,
-       'weight_decay': 0.01,
-       'epochs': 250,
-}
+# HYPER_PARAMS = {
+#        'num_hidden': 4,
+#        'hidden_size': 10,
+#        'lr': 0.01,
+#        'weight_decay': 0.01,
+#        'epochs': 250,
+# }
 
 
 class Experiment():
     def __init__(self,
-                 n_experiments = 5,
+                 n_experiments = 10,
                  seed = 42,
                  graphs = "all",
-                 sweep_samples = 5,
+                 sweep_samples = 10,
                  search_space=None,
-                 opt_trials=1):
+                 opt_trials=10):
         self.n_experiments = n_experiments
         self.seed = seed
         self.sweep_samples = sweep_samples
@@ -63,15 +63,15 @@ class Experiment():
         download_data()
     
     def fit(self, G, train_idx, val_idx, test_idx, labels):
-        # model, test_accuracy = hyper_param_opt(
-        #     G, self.search_space, train_idx, val_idx, test_idx, labels, num_trials=self.opt_trials
-        # )
-        model, train_acc, val_acc, test_acc = trainer(
-            copy.deepcopy(G),
-            train_idx, val_idx, test_idx, labels,
-            HYPER_PARAMS["hidden_size"], HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"],
-            verbose=False
+        model, train_acc, val_acc, test_acc = hyper_param_opt(
+            G, self.search_space, train_idx, val_idx, test_idx, labels, num_trials=self.opt_trials
         )
+        # model, train_acc, val_acc, test_acc, _ = trainer(
+        #     copy.deepcopy(G),
+        #     train_idx, val_idx, test_idx, labels,
+        #     HYPER_PARAMS["hidden_size"], HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"],
+        #     verbose=False
+        # )
         return model, train_acc, val_acc, test_acc
 
     def generate_dataset_split(self):
