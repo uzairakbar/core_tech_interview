@@ -68,12 +68,14 @@ class Experiment():
         
         error_dim = (self.sweep_samples, self.n_experiments)
         results = {name: np.zeros(error_dim) for name in self.graphs}
-
+        
+        total_exp = param_values*self.n_experiments*len(self.graphs)
         for i, param in enumerate(param_values):
             for j in range(self.n_experiments):
                 train_idx, val_idx, test_idx, labels = self.generate_dataset_split()
-                for graph_name, graph in self.graphs.items():
-                    print(f"EXPERIMENT -- nth Noise: {i+1}/{self.sweep_samples}, Exp: {j+1}/{self.n_experiments}, Graph: {graph_name}")
+                for k, (graph_name, graph) in enumerate(self.graphs.items()):
+                    exp_num = (i+1)*(j+1)*(k+1)
+                    print(f"EXPERIMENT {exp_num}/{total_exp} -- nth Noise: {i+1}/{self.sweep_samples}, Exp: {j+1}/{self.n_experiments}, Graph: {graph_name}")
                     G = graph(indices=(train_idx, val_idx, test_idx), f=param)
                     _, results[graph_name][i][j] = self.fit(
                         G, train_idx, val_idx, test_idx, labels
