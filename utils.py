@@ -32,11 +32,10 @@ def set_seed(seed = 42):
 
 def sweep_plot(x, y,
                xlabel,
-               ylabel="RSE",
+               ylabel="Test Accuracy",
                xscale="linear",
                vertical_plots=[],
-               save=True,
-               trivial_solution=True):
+               save=True):
     sns.set_style("darkgrid")
     colors = sns.color_palette()[:len(y)+1]
     fig = plt.figure()
@@ -44,23 +43,13 @@ def sweep_plot(x, y,
     for i, (method, errors) in enumerate(y.items()):
         mean = errors.mean(axis = 1)
 
-        if "DAIV" in method:
-            alpha = "" if (method == "DAIV") else method.split("+")[-1]
-            label_prefix = "average " if (method in vertical_plots) else "DAIV-"
-            label = label_prefix + fr"$\alpha^{{\mathrm{{\mathsf{{{alpha}}}}}}}$"
-        else:
-            label = method
+        label = method
         labels.append(label)
 
         if method in vertical_plots:
             plt.axvline(x = mean.mean(), color=colors[i], label=label)
         else:
             plt.plot(x, mean, color=colors[i], label=label)
-    
-    if trivial_solution:
-        label = r"$\mathbf{0}_{30}$"
-        labels.append(label)
-        plt.axhline(y = 0.5, color = colors[-1], label=label)
         
     for i, (method, errors) in enumerate(y.items()):
         if method not in vertical_plots:
