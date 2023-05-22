@@ -43,7 +43,7 @@ class Experiment():
             self.graphs = {m: ALL_GRAPHS[m] for m in graphs.split(',')}
         download_data()
     
-    def fit(G, train_idx, val_idx, test_idx, labels):
+    def fit(self, G, train_idx, val_idx, test_idx, labels):
         model, accuracy = hyper_param_opt(
             G, SEARCH_SPACE, train_idx, val_idx, test_idx, labels
         )
