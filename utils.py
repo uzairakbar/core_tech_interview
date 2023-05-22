@@ -64,7 +64,7 @@ def sweep_plot(x, y,
     plt.tight_layout()
     plt.show()
     if save:
-        fname = "".join(c for c in xlabel if c.isalnum()) + "_sweep"
+        fname = "".join(c for c in ylabel if c.isalnum()) + "_sweep"
         fig.savefig(f"{fname}.png", format="png", dpi=1200)
 
 def class_weights(labels):

@@ -39,4 +39,4 @@ def hyper_param_opt(
         f"""\nBEST CONFIG: {best_config},
         Best Val Loss: {best_val_loss:.4f}, Best Val Acc: {best_val_acc:.4f}, Best Test Acc: {best_test_acc:.4f}"""
     )
-    return best_model, best_test_acc
+    return best_model, best_val_acc, best_test_acc

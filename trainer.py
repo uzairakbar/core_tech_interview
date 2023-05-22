@@ -24,6 +24,7 @@ def trainer(
     log_train_loss = []
     best_val_acc = 0
     best_test_acc = 0
+    best_train_acc = 0
     best_val_loss = float("inf")
     for epoch in range(epochs):
         logits = model(G)
@@ -51,6 +52,7 @@ def trainer(
             best_val_acc = val_acc
             best_test_acc = test_acc
             best_val_loss = val_loss
+            best_train_acc = train_acc
             best_model = copy.deepcopy(model)
             best_norm = norm
             best_epoch = epoch
@@ -88,5 +90,5 @@ def trainer(
         plt.title(f"Training Config: #h-layers: {num_hidden}, #h-features: {hidden_size}, lr: {lr:.4f}, weight_decay: {weight_decay:.4f}")
         plt.grid()
 
-    print(f"""TRAINING RESULT -- Val Acc: {best_val_acc:.4f}, Test Acc: {best_test_acc:.4f}""")
-    return best_model.eval(), best_val_acc, best_test_acc, best_val_loss
+    print(f"""TRAINING RESULT -- Train Acc: {best_train_acc:.4f}, Val Acc: {best_val_acc:.4f}, Test Acc: {best_test_acc:.4f}""")
+    return best_model.eval(), best_train_acc, best_val_acc, best_test_acc

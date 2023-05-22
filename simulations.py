@@ -8,6 +8,8 @@ from scipy.stats import lognorm
 from optimizer import hyper_param_opt
 from dataset import train_val_test_split, download_data
 from graph import generate_graph
+from trainer import trainer
+import copy
 
 
 ALL_GRAPHS = {
@@ -29,14 +31,23 @@ SEARCH_SPACE = {
        'epochs': [250,]
 }
 
+HYPER_PARAMS = {
+       'num_hidden': 3,
+       'hidden_size': 10,
+       'lr': 0.01,
+       'weight_decay': 0.01,
+       'epochs': 250,
+}
+
 
 class Experiment():
     def __init__(self,
-                 n_experiments = 10,
+                 n_experiments = 5,
                  seed = 42,
                  graphs = "all",
-                 sweep_samples = 10,
-                 search_space=None):
+                 sweep_samples = 5,
+                 search_space=None,
+                 opt_trials=1):
         self.n_experiments = n_experiments
         self.seed = seed
         self.sweep_samples = sweep_samples
@@ -48,14 +59,21 @@ class Experiment():
         if search_space is None:
             search_space = SEARCH_SPACE
         self.search_space = search_space
+        self.opt_trials = opt_trials
         download_data()
     
     def fit(self, G, train_idx, val_idx, test_idx, labels):
-        model, accuracy = hyper_param_opt(
-            G, self.search_space, train_idx, val_idx, test_idx, labels, num_trials=10
+        # model, test_accuracy = hyper_param_opt(
+        #     G, self.search_space, train_idx, val_idx, test_idx, labels, num_trials=self.opt_trials
+        # )
+        model, train_acc, val_acc, test_acc = trainer(
+            copy.deepcopy(G),
+            train_idx, val_idx, test_idx, labels,
+            HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"],
+            verbose=False
         )
-        return model, accuracy
-    
+        return model, train_acc, val_acc, test_acc
+
     def generate_dataset_split(self):
         train_idx, val_idx, test_idx, labels = train_val_test_split()
         return train_idx, val_idx, test_idx, labels
@@ -72,7 +90,9 @@ class Experiment():
         param_values = self.param_sweep()
         
         error_dim = (self.sweep_samples, self.n_experiments)
-        results = {name: np.zeros(error_dim) for name in self.graphs}
+        train = {name: np.zeros(error_dim) for name in self.graphs}
+        val = {name: np.zeros(error_dim) for name in self.graphs}
+        test = {name: np.zeros(error_dim) for name in self.graphs}
         
         total_exp = self.sweep_samples*self.n_experiments*len(self.graphs)
         for i, param in enumerate(param_values):
@@ -82,18 +102,24 @@ class Experiment():
                     exp_num = (i+1)*(j+1)*(k+1)
                     print(f"EXPERIMENT {exp_num}/{total_exp} -- nth Noise: {i+1}/{self.sweep_samples}, Exp: {j+1}/{self.n_experiments}, Graph: {graph_name}")
                     G = graph(indices=(train_idx, val_idx, test_idx), f=param)
-                    _, results[graph_name][i][j] = self.fit(
+                    _, train[graph_name][i][j], val[graph_name][i][j], test[graph_name][i][j] = self.fit(
                         G, train_idx, val_idx, test_idx, labels
                     )
-        return param_values, results
+        return param_values, train, val, test
     
 
 
 
 def main():
-    f_values, results = Experiment().run()
+    f_values, train, val, test = Experiment().run()
     sweep_plot(
-        f_values, results, xlabel=r"Noise Strength $f$", xscale="linear"
+        f_values, train, xlabel=r"Noise Strength $f$", ylabel="Train Acc.", xscale="linear"
+    )
+    sweep_plot(
+        f_values, val, xlabel=r"Noise Strength $f$", ylabel="Val. Acc.", xscale="linear"
+    )
+    sweep_plot(
+        f_values, test, xlabel=r"Noise Strength $f$", ylabel="Test Acc.", xscale="linear"
     )
 
 
