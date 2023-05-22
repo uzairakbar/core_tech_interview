@@ -74,7 +74,7 @@ class Experiment():
         error_dim = (self.sweep_samples, self.n_experiments)
         results = {name: np.zeros(error_dim) for name in self.graphs}
         
-        total_exp = param_values*self.n_experiments*len(self.graphs)
+        total_exp = self.sweep_samples*self.n_experiments*len(self.graphs)
         for i, param in enumerate(param_values):
             for j in range(self.n_experiments):
                 train_idx, val_idx, test_idx, labels = self.generate_dataset_split()
