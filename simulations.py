@@ -23,7 +23,7 @@ ALL_GRAPHS = {
 
 SEARCH_SPACE = {
        'num_hidden': [2, 3],
-       'hidden_size': [3,],
+       'hidden_size': [10,],
        'lr': lognorm(s=0.01, scale=0.01),
        'weight_decay': lognorm(s=0.01, scale=0.01),
        'epochs': [100,]
@@ -47,7 +47,7 @@ class Experiment():
     
     def fit(self, G, train_idx, val_idx, test_idx, labels):
         model, accuracy = hyper_param_opt(
-            G, SEARCH_SPACE, train_idx, val_idx, test_idx, labels
+            G, SEARCH_SPACE, train_idx, val_idx, test_idx, labels, num_trials=3
         )
         return model, accuracy
     
