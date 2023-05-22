@@ -13,11 +13,11 @@ from graph import generate_graph
 ALL_GRAPHS = {
     "Baseline": lambda indices, f: generate_graph(),
     "Noise>P": lambda indices, f: generate_graph(noise_perturbes=["paper"], indices=indices, f=f),
-    # "Noise>A": lambda indices, f: generate_graph(noise_perturbes=["author"], indices=indices, f=f),
-    # "Noise>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
-    # "Noise>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
-    # "Noise>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
-    # "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
+    "Noise>A": lambda indices, f: generate_graph(noise_perturbes=["author"], indices=indices, f=f),
+    "Noise>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
+    "Noise>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
+    "Noise>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
+    "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
 }
 
 
@@ -32,10 +32,10 @@ SEARCH_SPACE = {
 
 class Experiment():
     def __init__(self,
-                 n_experiments = 5,
+                 n_experiments = 10,
                  seed = 42,
                  graphs = "all",
-                 sweep_samples = 5):
+                 sweep_samples = 10):
         self.n_experiments = n_experiments
         self.seed = seed
         self.sweep_samples = sweep_samples

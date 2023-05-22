@@ -65,7 +65,7 @@ def sweep_plot(x, y,
     plt.show()
     if save:
         fname = "".join(c for c in xlabel if c.isalnum()) + "_sweep"
-        fig.savefig(f"{fname}.pdf", format="pdf", dpi=1200)
+        fig.savefig(f"{fname}.png", format="png", dpi=1200)
 
 def class_weights(labels):
     classes_labels, counts = np.unique(labels, return_counts=True)
