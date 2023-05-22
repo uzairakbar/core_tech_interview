@@ -23,14 +23,14 @@ SEARCH_SPACE = {
        'num_hidden': [2, 3],
        'hidden_size': [10,],
        'lr': lognorm(s=1.0, scale=0.01),
-       'weight_decay': lognorm(s=0.5, scale=0.01),
-       'epochs': [250,]
+       'weight_decay': lognorm(s=1.0, scale=0.01),
+       'epochs': [100,]
 }
 
 
 class Experiment():
     def __init__(self,
-                 n_experiments = 10,
+                 n_experiments = 5,
                  seed = 42,
                  graphs = "all",
                  sweep_samples = 5):
