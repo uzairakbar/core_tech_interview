@@ -70,7 +70,7 @@ class Experiment():
         for i, param in enumerate(param_values):
             for j in range(self.n_experiments):
                 train_idx, val_idx, test_idx, labels = self.generate_dataset_split()
-                for graph_name, graph in self.methods.items():
+                for graph_name, graph in self.graphs.items():
                     G = graph((train_idx, val_idx, test_idx), f=param)
                     _, results[graph_name][i][j] = self.fit(
                         G, train_idx, val_idx, test_idx, labels
