@@ -9,6 +9,7 @@ from optimizer import hyper_param_opt
 from dataset import train_val_test_split, download_data
 from graph import generate_graph
 
+
 ALL_GRAPHS = {
     "Baseline": lambda indices, f: generate_graph(),
     "Noise>P": lambda indices, f: generate_graph(noise_perturbes=["paper"], indices=indices, f=f),
@@ -16,24 +17,25 @@ ALL_GRAPHS = {
     "Noise>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
     "Noise>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
     "Noise>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
-    "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "suthor", "subject"], indices=indices, f=f),
+    "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
 }
+
 
 SEARCH_SPACE = {
        'num_hidden': [2, 3],
-       'hidden_size': [10,],
-       'lr': lognorm(s=1.0, scale=0.01),
-       'weight_decay': lognorm(s=1.0, scale=0.01),
+       'hidden_size': [3,],
+       'lr': lognorm(s=0.01, scale=0.01),
+       'weight_decay': lognorm(s=0.01, scale=0.01),
        'epochs': [100,]
 }
 
 
 class Experiment():
     def __init__(self,
-                 n_experiments = 5,
+                 n_experiments = 3,
                  seed = 42,
                  graphs = "all",
-                 sweep_samples = 5):
+                 sweep_samples = 3):
         self.n_experiments = n_experiments
         self.seed = seed
         self.sweep_samples = sweep_samples
@@ -71,7 +73,7 @@ class Experiment():
             for j in range(self.n_experiments):
                 train_idx, val_idx, test_idx, labels = self.generate_dataset_split()
                 for graph_name, graph in self.graphs.items():
-                    G = graph((train_idx, val_idx, test_idx), f=param)
+                    G = graph(indices=(train_idx, val_idx, test_idx), f=param)
                     _, results[graph_name][i][j] = self.fit(
                         G, train_idx, val_idx, test_idx, labels
                     )
