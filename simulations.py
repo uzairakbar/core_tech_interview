@@ -14,12 +14,12 @@ import copy
 
 ALL_GRAPHS = {
     "Baseline": lambda indices, f: generate_graph(),
-    "Noise>P": lambda indices, f: generate_graph(noise_perturbes=["paper"], indices=indices, f=f),
-    "Noise>A": lambda indices, f: generate_graph(noise_perturbes=["author"], indices=indices, f=f),
-    "Noise>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
-    "Noise>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
-    "Noise>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
-    "Noise>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
+    "N>P": lambda indices, f: generate_graph(noise_perturbes=["paper"], indices=indices, f=f),
+    "N>A": lambda indices, f: generate_graph(noise_perturbes=["author"], indices=indices, f=f),
+    "N>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
+    "N>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
+    "N>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
+    "N>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
 }
 
 
@@ -31,15 +31,6 @@ SEARCH_SPACE = {
        'epochs': [250,],
        'early_stopping': [True,],
 }
-
-# HYPER_PARAMS = {
-#        'num_hidden': 4,
-#        'hidden_size': 10,
-#        'lr': 0.01,
-#        'weight_decay': 0.01,
-#        'epochs': 250,
-#        'early_stopping': False,
-# }
 
 
 class Experiment():
@@ -68,12 +59,6 @@ class Experiment():
         model, train_acc, val_acc, test_acc = hyper_param_opt(
             G, self.search_space, train_idx, val_idx, test_idx, labels, num_trials=self.opt_trials
         )
-        # model, train_acc, val_acc, test_acc, _ = trainer(
-        #     copy.deepcopy(G),
-        #     train_idx, val_idx, test_idx, labels,
-        #     HYPER_PARAMS["hidden_size"], HYPER_PARAMS["num_hidden"], HYPER_PARAMS["lr"], HYPER_PARAMS["weight_decay"], HYPER_PARAMS["epochs"], HYPER_PARAMS["early_stopping"],
-        #     verbose=False
-        # )
         return model, train_acc, val_acc, test_acc
 
     def generate_dataset_split(self):
