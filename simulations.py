@@ -13,13 +13,13 @@ import copy
 
 
 ALL_GRAPHS = {
-    "Baseline": lambda indices, f: generate_graph(),
-    "N>P": lambda indices, f: generate_graph(noise_perturbes=["paper"], indices=indices, f=f),
-    "N>A": lambda indices, f: generate_graph(noise_perturbes=["author"], indices=indices, f=f),
-    "N>S": lambda indices, f: generate_graph(noise_perturbes=["subject"], indices=indices, f=f),
-    "N>PA": lambda indices, f: generate_graph(noise_perturbes=["paper", "author"], indices=indices, f=f),
-    "N>PS": lambda indices, f: generate_graph(noise_perturbes=["paper", "subject"], indices=indices, f=f),
-    "N>PAS": lambda indices, f: generate_graph(noise_perturbes=["paper", "author", "subject"], indices=indices, f=f),
+    "Baseline": lambda f: generate_graph(),
+    "N>P": lambda f: generate_graph(noise_perturbes=["paper"], f=f),
+    "N>A": lambda f: generate_graph(noise_perturbes=["author"], f=f),
+    "N>S": lambda f: generate_graph(noise_perturbes=["subject"], f=f),
+    "N>PA": lambda f: generate_graph(noise_perturbes=["paper", "author"], f=f),
+    "N>PS": lambda f: generate_graph(noise_perturbes=["paper", "subject"], f=f),
+    "N>PAS": lambda f: generate_graph(noise_perturbes=["paper", "author", "subject"], f=f),
 }
 
 
@@ -89,7 +89,7 @@ class Experiment():
                 for k, (graph_name, graph) in enumerate(self.graphs.items()):
                     exp_num = exp_num + 1
                     print(f"EXPERIMENT {exp_num}/{total_exp} -- nth Noise: {i+1}/{self.sweep_samples}, Exp: {j+1}/{self.n_experiments}, Graph: {graph_name}")
-                    G = graph(indices=(train_idx, val_idx, test_idx), f=param)
+                    G = graph(f=param)
                     _, train[graph_name][i][j], val[graph_name][i][j], test[graph_name][i][j] = self.fit(
                         G, train_idx, val_idx, test_idx, labels
                     )

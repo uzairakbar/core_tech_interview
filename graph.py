@@ -2,7 +2,7 @@ import scipy
 import torch
 import dgl
 
-def generate_graph(noise_perturbes=None, indices=None, f=0.0):
+def generate_graph(noise_perturbes=None, f=0.0):
     data_file_path = '/content/ACM.mat'
     data = scipy.io.loadmat(data_file_path)
     num_papers = data['PvsA'].shape[0]
@@ -14,11 +14,6 @@ def generate_graph(noise_perturbes=None, indices=None, f=0.0):
     papers, paper_noise = torch.arange(num_papers), noise[:num_papers]
     authors, author_noise = torch.arange(num_authors), noise[num_papers:-num_subjects]
     subjects, subject_noise = torch.arange(num_subjects), noise[-num_subjects:]
-
-    if indices is not None:
-        (train_idx, val_idx, test_idx) = indices
-        train_val_idx = torch.cat((train_idx, val_idx))
-        papers, paper_noise = papers[train_val_idx], paper_noise[train_val_idx]
     
     noise_targets = {
         "paper": (paper_noise, papers),
