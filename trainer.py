@@ -76,6 +76,7 @@ def trainer(
             print(
                 f"Epoch {epoch}, "
                 f"Train Loss {loss.item():.4f} (Best {best_train_loss:.4f}), "
+                f"Train Acc {train_acc:.4f} (Best {best_train_acc:.4f}), "
                 f"Val Loss {val_loss:.4f} (Best {best_val_loss:.4f}), "
                 f"Val Acc {val_acc:.4f} (Best {best_val_acc:.4f}), "
                 f"Test Acc {test_acc:.4f} (Best {best_test_acc:.4f}), "
