@@ -6,7 +6,19 @@ from collections import defaultdict
 
 
 
+def init_weights(layer):
+    """
+    He initialization for weights (recommended for relu activation variants)
+    """
+    if isinstance(layer, nn.Linear):
+        torch.nn.init.kaiming_normal_(layer.weight, a=0.01)
+        layer.bias.data.fill_(0.01)
+
+
 class mySequential(nn.Sequential):
+    """
+    Sequential module for taking & propagating multiple inputs across layers.
+    """
     def forward(self, *inputs):
         for module in self._modules.values():
             if type(inputs) == tuple:
@@ -17,6 +29,9 @@ class mySequential(nn.Sequential):
 
 
 class Relu(nn.Module):
+    """
+    Applies relu (or leaky-relu) to each tensor in a dictionary.
+    """
     def __init__(self):
         super(Relu, self).__init__()
     
@@ -25,6 +40,9 @@ class Relu(nn.Module):
 
 
 class Interpolate(nn.Module):
+    """
+    Interpolates tensors in a dictionary to desired output `size`.
+    """
     def __init__(self, size):
         super(Interpolate, self).__init__()
         self.size = size
@@ -34,6 +52,18 @@ class Interpolate(nn.Module):
             k : F.interpolate(h[:, None], size=self.size)[:, 0]
                 for k, h in h_dict.items()
         }
+
+
+class BatchNorm(nn.Module):
+    """
+    Applies batchnorm to each tensor in a dictionary.
+    """
+    def __init__(self, in_sizes):
+        super(BatchNorm, self).__init__()
+        self.batch_norm = nn.ModuleDict({k : nn.BatchNorm1d(in_size) for k, in_size in in_sizes.items()})
+    
+    def forward(self, G, h_dict):
+        return G, {k : self.batch_norm[k](h) for k, h in h_dict.items()}
 
 
 class HeteroRGCNLayer(nn.Module):
@@ -103,7 +133,7 @@ class HeteroRGCN(nn.Module):
         
         for key, embed in embed_dict.items():
             if embed.requires_grad:
-                nn.init.xavier_uniform_(embed)
+                nn.init.kaiming_normal_(embed)
         
         self.embed = nn.ParameterDict(embed_dict)
 
@@ -118,6 +148,9 @@ class HeteroRGCN(nn.Module):
                 G.canonical_etypes
                 )
             )
+            # experimenting with batchnorm (probably not needed because of 
+            # already good weight initialization and relatively shallow network)
+            # self.layers.add_module(f"batchnorm{i}", BatchNorm(hidden_sizes))
             self.layers.add_module(f"relu{i}", Relu())
         self.layers.add_module(
             f"layer{num_hidden}",
@@ -127,6 +160,8 @@ class HeteroRGCN(nn.Module):
             G.canonical_etypes
             )
         )
+
+        self.layers.apply(init_weights)
 
     def forward(self, G):
         _, h_dict = self.layers(G, self.embed)
